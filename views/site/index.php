@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 use yii\bootstrap5\ActiveForm;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Книги';?>
 <div class="site-index">
@@ -17,6 +19,15 @@ $this->title = 'Книги';?>
                 <th>ISBN</th>
                 <th>Год выпуска</th>
                 <th>Описание</th>
+                <th>
+                    <?php
+                        echo Html::a('Создать книгу', Url::to(['book/create']), [
+                            'class' => 'btn btn-success',
+                            'data-method' => 'post',
+                            'data-confirm' => 'Создать новую книгу?'
+                        ]);
+                    ?>
+                </th>
             </tr>
         </thead>
         <tbody>
