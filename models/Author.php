@@ -1,18 +1,36 @@
 <?php
 
 namespace app\models;
+use Yii;
 
-use yii\db\ActiveRecord;
 
-class Author extends ActiveRecord
+class Author extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $name;
-    public $birth_day;
-    public $biography;
+    public $new_id;
+    public $new_name;
+    public $new_birth_date;
+    public $new_biography;
 
     public static function tableName()
     {
         return 'authors'; 
+    }
+
+    public function rules()
+    {
+        return [
+            [['name'], 'required', 'message' => 'Поле "Имя" обязательно для заполнения.'],
+            [['birth_date'], 'date', 'format' => 'php:d-m-Y'],
+            [['biography', 'name'], 'string'],
+        ];
+    }
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name'=> 'Имя',
+            'birth_date'=> 'Дата рождения',
+            'biography'=> 'Биография'
+        ];
     }
 }

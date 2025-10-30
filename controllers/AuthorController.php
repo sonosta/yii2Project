@@ -22,4 +22,15 @@ class AuthorController extends Controller
             return 'Ошибка создания автора: ' . json_encode($author->errors);
         }
     }
+
+    public function actionCreateAuthor()
+    {
+        $model = new Author();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->asJson(['success' => true]);
+        }
+
+        return $this->renderAjax('_form_author', ['model' => $model]);
+    }
 }
