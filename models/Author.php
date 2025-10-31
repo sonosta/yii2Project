@@ -19,8 +19,7 @@ class Author extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required', 'message' => 'Поле "Имя" обязательно для заполнения.'],
-            [['birth_date'], 'date', 'format' => 'php:d-m-Y'],
+            [['birth_date'], 'date', 'format' => 'php:Y-m-d'],
             [['biography', 'name'], 'string'],
         ];
     }
@@ -32,5 +31,16 @@ class Author extends \yii\db\ActiveRecord
             'birth_date'=> 'Дата рождения',
             'biography'=> 'Биография'
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->birth_date = Yii::$app->formatter->asDate($this->birth_date, 'php:Y-m-d');
+            $this->name = $this->name;
+            $this->biography = $this->biography;
+            return true;
+        }
+        return false;
     }
 }
