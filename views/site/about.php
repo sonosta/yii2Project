@@ -17,6 +17,15 @@ $script = <<< JS
             .load('index.php?r=author/create-author');
     });
 
+    $(document).on('click', '.btn-edit', function () {
+        var id = $(this).data('id');
+        var url = 'index.php?r=author/update-author&id=' + id;
+
+        $('#author-modal').modal('show')
+            .find('#modalContent')
+            .load(url);
+    });
+
     $(document).on('beforeSubmit', '#form-author', function(e) {
 
         var form = $(this);
@@ -53,23 +62,30 @@ $this->registerJs($script);
                         'class' => 'yii\grid\ActionColumn',
                         'header' => Html::button('Создать автора', ['class' => 'btn btn-success','id' => 'modalButton']),
                         'contentOptions' => ['class' => 'actions wo-after'],
-                        'template' => '{delete}',
+                        'template' => '<div  data-grid-action-btn>
+                                            <div class="d-flex gap-4 justify-content-between">{update}{delete}</div>
+                                        </div>',
                         'options' => ['width' => '50'],
                         'buttons' => [
                             'delete' => function ($data,$modal) {
 
                                 $url = Url::to(['author/delete', 'id' => $modal['id'], 'type' => 'delete']);
 
-                                return Html::a(Html::button('Удалить', ['class' => 'btn btn-success']), $url, [
+                                return Html::a(Html::button('Удалить', ['class' => 'btn btn-danger']), $url, [
                                     'title' => 'Удалить',
                                     'aria-label' => 'Удалить',
                                     'data-method' => 'post',
                                     'data-pjax' => '0',
                                 ]);
+                            },
+                            'update' => function ($data , $model){
+                                $url = Url::to(['author/update-book', 'id' => $model['id'], 'type' => 'delete']);
+                                return Html::button('Редактировать', ['id' => 'modalUpdateButton','class' => 'btn btn-primary btn-edit','data-id' => $model->id]);
                             }
                         ],
                         'visibleButtons' => [
-                            'delete' => true
+                            'delete' => true,
+                            'update' => true
                         ]
                     ]
                 ]
@@ -79,6 +95,7 @@ $this->registerJs($script);
                 'size' => Modal::SIZE_LARGE,
             ]);
 
+            
             echo '<div id="modalContent"></div>';
 
             Modal::end();

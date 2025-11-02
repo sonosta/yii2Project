@@ -12,6 +12,8 @@ use app\models\ContactForm;
 use app\models\Book;
 use app\models\Author;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+
 
 class SiteController extends Controller
 {
@@ -59,8 +61,10 @@ class SiteController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Book::find()
         ]);
+        $authors = ArrayHelper::map(Author::find()->all(), 'id', 'name');
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'authors' => $authors,
         ]);
     }
 

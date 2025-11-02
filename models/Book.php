@@ -3,6 +3,8 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use app\models\Author;
+
 
 class Book extends ActiveRecord
 {
@@ -24,7 +26,7 @@ class Book extends ActiveRecord
             [['title'], 'required', 'message' => 'Поле "Наименование" обязательно для заполнения.'],
             [['author_id'], 'required', 'message' => 'Поле "Автор" обязательно для заполнения.'],
             [['isbn'], 'required', 'message' => 'Поле "ISBN" обязательно для заполнения.'],
-            [['publish_year'], 'date', 'format' => 'php:d-m-Y'],
+            [['publish_year', 'author_id'], 'integer'],
             [['title', 'description'], 'string'],
         ];
     }
@@ -38,5 +40,23 @@ class Book extends ActiveRecord
             'isbn'=> 'ISBN',
             'description'=> 'Описание'
         ];
+    }
+
+    public function getAuthor()
+    {
+        return $this->hasOne(Author::class, ['id' => 'author_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->publish_year = $this->publish_year;
+            $this->title = $this->title;
+            $this->author_id = $this->author_id;
+            $this->isbn = $this->isbn;
+            $this->description = $this->description;
+            return true;
+        }
+        return false;
     }
 }

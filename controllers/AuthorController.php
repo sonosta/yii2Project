@@ -23,6 +23,19 @@ class AuthorController extends Controller
         return $this->renderAjax('_form_author', ['model' => $model]);
     }
 
+    public function actionUpdateAuthor($id)
+    {
+        $model = new Author()::findOne($id);
+
+        // if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //     return $this->redirect(['site/about']);
+        // }
+
+        return $this->renderAjax('_form_author', [
+            'model' => $model
+        ]);
+    }
+
     public function actionDelete($id)
     {
         $author = Author::findOne($id);

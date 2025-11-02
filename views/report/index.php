@@ -16,6 +16,20 @@ $this->title = 'Отчет';
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php $form = ActiveForm::begin([
+        'method' => 'get',
+        'action' => ['index'],
+    ]); ?>
+
+    <?= $form->field($searchModel, 'name') ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Сбросить', ['class' => 'btn btn-outline-secondary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
     <?php Pjax::begin();?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
